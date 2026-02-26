@@ -42,4 +42,66 @@
  */
 export function generateReportCard(student) {
   // Your code here
+
+  if (
+      student == null || 
+      typeof student != 'object' ||
+      !student.hasOwnProperty('name')  || 
+      student.name=='' ||
+      !student.hasOwnProperty('marks')  ||
+      Object.keys(student.marks).length == 0   ||
+      Object.values(student.marks).filter((ele) => (ele <0 || ele >100 || typeof ele != 'number')).length !=0
+
+  ){
+    return null 
+  }
+
+  let  totSub = Object.values(student.marks).length
+  let totMarks = Object.values(student.marks).reduce((sum,ele) =>(sum+ele) , 0 )
+
+  let pers = parseFloat((totMarks / totSub).toFixed(2))
+
+  let grade = ''
+  if(pers>=90){
+    grade='A+'
+  }else if (pers>=80){
+      grade='A'
+  }else if (pers>=70){
+      grade='B'
+  }else if (pers>=60){
+      grade='C'
+  }else if (pers>=40){
+      grade='D'
+  }else {
+      grade='F'
+  }
+
+  let markEle = Object.entries(student.marks)
+  
+  let passed = markEle.filter((ele) => (ele[1] >=40 )).map((ele) => ele[0])
+  let failed = markEle.filter((ele) => (ele[1] <40 )).map((ele) => ele[0])
+  
+  markEle.sort((a,b) =>  b[1] -a[1] ) 
+
+  
+
+  return {
+    name : student.name , 
+    totalMarks  : totMarks,
+    percentage : pers,
+    grade : grade,
+    highestSubject : markEle.at(0)[0],
+    lowestSubject : markEle.at(-1)[0],
+    passedSubjects : passed,
+    failedSubjects : failed,
+    subjectCount : totSub
+
+  }
 }
+
+
+console.log(generateReportCard({
+  name :'Akash' ,
+  marks :{ ben : 60 , maths : 80   ,eng : 80 }
+}));
+

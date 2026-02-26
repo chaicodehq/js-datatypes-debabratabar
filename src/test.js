@@ -27,5 +27,9 @@ console.log("masala chai".toUpperCase());
   let exp = ["aman"]
   // console.log(exp.slice(1));
   console.log(exp.join(':'));
+
+
+  let marks = { maths: 35, science: 28 }
+  console.log(Object.values(marks))
   
   
