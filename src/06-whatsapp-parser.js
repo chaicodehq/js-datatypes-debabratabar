@@ -40,4 +40,33 @@
  */
 export function parseWhatsAppMessage(message) {
   // Your code here
+
+  if ( typeof message != 'string' || message.split('-').length ==1 ||  message.split(':').length ==1){
+    return null 
+  }
+
+
+  let dt = message.split(',')
+  let tm = message.split(',')[1].split('-')
+  if ( tm.length==1){return null }
+  let sender = message.split(',')[1].split('-')[1].split(':')
+  if ( sender.length==1){return null }
+  let msg = message.split(',')[1].split('-')[1].split(':')
+  let wc =   msg.slice(1).join(':').split(" ").filter((ele) => ele != "")
+
+
+  return {
+    date : dt[0].trim() , 
+    time : tm[0].trim() , 
+    sender : sender[0].trim(),
+    text:   msg.slice(1).join(":").trim(),
+    wordCount : wc.length ,
+    sentiment  : wc.filter((ele) => ( ele == '😂' || ele ==':)' || ele.toLowerCase()=='haha')).length>0 ? 'funny' : wc.filter((ele) => ( ele == '❤' || ele.toLowerCase()=='love' || ele.toLowerCase()=='pyaar' )).length>0 ? 'love' : 'neutral'
+  }
+
 }
+
+
+console.log(parseWhatsAppMessage("25/01/2025, 14:30 - Rahul: Time is 5:30 okay?"));
+console.log(parseWhatsAppMessage("01/12/2024, 09:15 - Priya: I love this song 😂"));
+

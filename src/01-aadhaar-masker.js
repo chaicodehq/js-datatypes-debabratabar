@@ -29,4 +29,25 @@
  */
 export function maskAadhaar(aadhaarNumber) {
   // Your code here
+  if ( typeof aadhaarNumber != 'string' || aadhaarNumber.length!=12){
+    return 'INVALID'
+  }
+
+  for ( const ch of aadhaarNumber){
+      // console.log(ch);
+    if ( ch.charCodeAt(0) <47 || ch.charCodeAt(0) >58 ){
+      // console.log(ch);
+      return 'INVALID'
+    }
+  }
+
+  let res = ['X'.repeat(4) , 'X'.repeat(4) , aadhaarNumber.slice(8)]
+
+  return res.join('-')
+
+
+  
 }
+
+
+console.log(maskAadhaar("987654320012"));

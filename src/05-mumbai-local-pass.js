@@ -43,4 +43,24 @@
  */
 export function generateLocalPass(passenger) {
   // Your code here
+
+  if (  
+    passenger == null  ||
+    typeof passenger != 'object' ||
+    !passenger.hasOwnProperty('name') ||
+    !passenger.hasOwnProperty('from') ||
+    !passenger.hasOwnProperty('to') ||
+    !passenger.hasOwnProperty('classType') ||
+    ['first' , 'second'].filter((ele) => ele == passenger.classType.toLowerCase()).length == 0 ||
+    passenger.name==''
+  ){
+    return "INVALID PASS" 
+  }
+
+  return `MUMBAI LOCAL PASS\n---\nName: ${passenger.name.toUpperCase()}\nFrom: ${passenger.from.at(0).toUpperCase()+passenger.from.slice(1).toLowerCase()}\nTo: ${passenger.to.at(0).toUpperCase()+passenger.to.slice(1).toLowerCase()}\nClass: ${passenger.classType.toUpperCase()}\nPass ID: ${passenger.classType.at(0).toUpperCase()}${passenger.from.slice(0,3).toUpperCase()}${passenger.to.slice(0,3).toUpperCase()}`
 }
+
+
+console.log(generateLocalPass({ name: "rahul sharma", from: "dadar", to: "andheri", classType: "first" }));
+
+console.log(generateLocalPass(null));

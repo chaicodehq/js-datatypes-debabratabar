@@ -31,4 +31,22 @@
  */
 export function fixBollywoodTitle(title) {
   // Your code here
+
+  let excep_case = ["ka", "ki", "ke", "se", "aur", "ya", "the", "of", "in", "a", "an"]
+  if ( typeof title != 'string' || title.trim() ==0  ){
+    return ""
+  }
+  let actual_words = title.split(' ').map((ele) => (ele.trim())).filter((ele) => ele.length!=0 )
+
+  return actual_words.map((ele) => 
+  ( ( excep_case.find((element) => (ele == element))!= undefined && ele != actual_words[0] ) ? ele : ele.at(0).toUpperCase()+ele.slice(1).toLowerCase() )).join(" ")
+
 }
+
+
+// console.log(fixBollywoodTitle("  DILWALE   DULHANIA   LE   JAYENGE  "));
+// console.log(fixBollywoodTitle(fixBollywoodTitle("the legend of bhagat singh")));
+// console.log(fixBollywoodTitle(fixBollywoodTitle("dil ka kya kare")));
+
+
+
