@@ -48,4 +48,63 @@
  */
 export function analyzeUPITransactions(transactions) {
   // Your code here
+
+  if( !Array.isArray(transactions) || transactions.length==0){
+    return null
+  }
+
+  let filteredTransactions = transactions.filter((ele) => (ele.amount>0 && (ele.type=='credit' || ele.type=='debit')))
+
+  if(filteredTransactions.length==0){
+    return null 
+  }
+
+  let totCred = filteredTransactions.filter((ele) => ele.type =='credit').reduce((acc , ele) => (acc+ele.amount) , 0 )
+  let totdebt = filteredTransactions.filter((ele) => ele.type =='debit').reduce((acc , ele) => (acc+ele.amount) , 0 )
+  let netBal = totCred -totdebt
+
+  filteredTransactions.sort((a,b) =>(b.amount - a.amount))
+
+  let catBreak ={}
+  filteredTransactions.forEach((ele) => {
+    (!catBreak.hasOwnProperty(ele.category)) ? catBreak[ele.category] = ele.amount : catBreak[ele.category]+=ele.amount
+  })
+
+  let freqCon = {}
+
+  filteredTransactions.forEach((ele) => {
+  (!freqCon.hasOwnProperty(ele.to)) ? freqCon[ele.to] = 1 : freqCon[ele.to]+=1
+  })
+
+  freqCon = Object.entries(freqCon)
+
+  console.log(freqCon);
+  
+
+
+  freqCon.sort((a,b) => (b[1] - a[1]))
+
+  console.log(freqCon);
+
+  return {
+    totalCredit :totCred ,
+    totalDebit :totdebt,
+    netBalance :netBal ,
+    transactionCount : filteredTransactions.length,
+    avgTransaction : Math.round(( totCred+totdebt) / filteredTransactions.length)  , 
+    highestTransaction : filteredTransactions.at(0),
+    categoryBreakdown : catBreak,
+    frequentContact: freqCon.at(0).at(0) , 
+    allAbove100 : filteredTransactions.every((ele) =>ele.amount>100),
+    hasLargeTransaction: filteredTransactions.some((ele) =>ele.amount>=5000)
+
+
+  }
 }
+
+
+
+console.log( analyzeUPITransactions([
+      { id: "T1", type: "credit", amount: 5000, to: "Salary", category: "income", date: "2025-01-01" },
+      { id: "T2", type: "debit", amount: 200, to: "Swiggy", category: "food", date: "2025-01-02" }
+    ]));

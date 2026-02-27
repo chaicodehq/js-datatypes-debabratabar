@@ -33,3 +33,24 @@ console.log("masala chai".toUpperCase());
   console.log(Object.values(marks))
   
   
+  console.log("FIRST50".toLowerCase());
+  
+  console.log(parseInt("a"));
+  let test = 'suma@'
+  console.log(test.includes('@'));
+  console.log(test.indexOf('@'))
+  console.log(test.lastIndexOf('@'))
+  console.log(parseInt('a')===true)
+  console.log('6789d'.split('').filter((ele) => Number.isInteger(parseInt(ele)) ) );
+
+  console.log(typeof parseInt('d'));
+
+  console.log(typeof NaN );
+  console.log(parseInt(25.5));
+  
+  
+  
+  
+
+  
+  

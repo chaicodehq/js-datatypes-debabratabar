@@ -47,4 +47,78 @@
  */
 export function buildZomatoOrder(cart, coupon) {
   // Your code here
+  if(cart == undefined || !Array.isArray(cart) ||  cart.length == 0 ){return null }
+
+
+  let filtered_cart = cart.filter((ele) => (ele.qty>0)).map((ele) => ({...ele , addOnTot : 
+    !ele.hasOwnProperty('addons') ? 0 : ele.addons.reduce((acc,curVal) => acc+ parseInt(curVal.split(':')[1]) ,0)}))
+  
+  
+  // (!ele.hasOwnProperty('addons')) ? 0 :   ele.addons.reduce((acc , ele) =>(acc + parseInt(ele.split(':')[1] )),0) 
+
+
+  let result =filtered_cart.map((ele) => {
+    return {
+      name : ele.name ,
+      qty : ele.qty ,
+      basePrice : ele.price , 
+      addonTotal : ele.addOnTot, 
+      itemTotal :(ele.price + ele.addOnTot ) * ele.qty
+
+    }
+  })
+  let sTot = result.reduce((acc , curVal) => (acc+curVal.itemTotal)  , 0 )
+  let dlvFee = 0
+
+  if(sTot<500){
+    dlvFee=30
+  }
+  else if( sTot >=500 &&  sTot<=999){
+    dlvFee =15
+  }
+  else{
+    dlvFee=0
+  }
+
+  let discount = 0
+
+  if(coupon ==null ||
+    coupon == undefined ||
+    typeof coupon != 'string'
+  ){
+    discount = 0 
+  }
+  else if ( coupon.toUpperCase() == 'FIRST50' ){
+    discount =Math.min( 150 , ((50*sTot)/100))
+  }else if (coupon.toUpperCase() == 'FLAT100'){
+    discount = 100
+
+  }else if(coupon.toUpperCase()=='FREESHIP'){
+      discount= dlvFee
+      dlvFee =0
+  }
+  // else{
+  //   discount =0 
+  // }
+
+
+
+
+  return {
+    items : result ,
+    subtotal : sTot , 
+    deliveryFee :dlvFee,
+    gst : parseFloat(((sTot*5)/100).toFixed(2)),
+    discount :discount,
+    grandTotal : Math.max( parseFloat((sTot+dlvFee+parseFloat(((sTot*5)/100).toFixed(2)) -discount).toFixed(2)) , 0 )
+    
+  }
+
+
 }
+
+
+
+// console.log( buildZomatoOrder([{ name: "Chai", price: 20, qty: 2 }]))
+console.log(buildZomatoOrder([{ name: "Biryani", price: 300, qty: 1, addons: ["Raita:30"] }], "FLAT100"));
+

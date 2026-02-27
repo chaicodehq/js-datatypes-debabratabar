@@ -63,4 +63,71 @@
  */
 export function validateForm(formData) {
   // Your code here
+  let errors={}
+
+  if(formData.name.trim() =='' || ( formData.name.trim().length <2 || formData.name.trim().length >50   ) ){
+    errors.name = 'Name must be 2-50 characters'
+  }
+
+  if(typeof formData.email !='string' || 
+    !formData.email.includes('@') ||
+    !formData.email.includes('.') ||
+    formData.email.indexOf('@') != formData.email.lastIndexOf('@') ||
+    !formData.email.split('@')[1].split('.').length >=2 
+  ){
+    errors.email = 'Invalid email format'
+  }
+
+  if ( typeof formData.phone !='string' ||
+    formData.phone.length !=10 || 
+     !'6789'.includes(formData.phone[0]) ||
+     formData.phone.split('').filter((ele) =>  Number.isInteger(parseInt(ele)) ).length !=10
+   ){
+    errors.phone = 'Invalid Indian phone number'
+   }
+
+   if( !Number.isInteger(parseInt(formData.age)) || 
+    formData.age - Math.trunc(formData.age) !=0 ||
+    parseInt(formData.age ) <16 ||
+    parseInt(formData.age ) >100
+   ){
+        errors.age = 'Age must be an integer between 16 and 100'
+   }
+
+   if( formData.pincode.length != 6 ||
+    formData.pincode.startsWith('0') ||
+    formData.pincode.split('').filter((ele) =>  Number.isInteger(parseInt(ele)) ).length !=6
+   ){
+        errors.pincode = 'Invalid Indian pincode'
+   }
+
+
+    if( !formData.hasOwnProperty('state') ||
+      formData.state == null  ||
+      formData.state == ""
+   ){
+        errors.state = 'State is required'
+   }
+
+
+   if ( !formData.agreeTerms ===true){
+    errors.agreeTerms = 'Must agree to terms'
+   }
+
+  return (Object.keys(errors).length ==0 )? {isValid :true , errors :{}} : { isValid: false , errors : errors }
+
 }
+
+
+
+console.log(validateForm({
+      name: "Rahul Sharma", email: "rahul@gmail.com", phone: "9876543210",
+      age: 20, pincode: "400001", state: "Maharashtra", agreeTerms: true
+    }));
+
+
+  console.log(validateForm({
+    name: "", email: "bad-email", phone: "12345", age: 25.5,
+     pincode: "0123", state: null, agreeTerms: false
+   }));
+  
